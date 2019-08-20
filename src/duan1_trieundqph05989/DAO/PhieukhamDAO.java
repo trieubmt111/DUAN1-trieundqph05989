@@ -5,7 +5,7 @@ import java.util.List;
 import duan1_trieundqph05989.entity.Phieukham;
 
 public interface PhieukhamDAO {
-	public List<Phieukham> getAlls(int mapik);
+	public List<Phieukham> getAlls(String mapik);
 
     public boolean insert(Phieukham phieukham);
 

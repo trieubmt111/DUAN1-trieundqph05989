@@ -7,7 +7,7 @@ import duan1_trieundqph05989.entity.Phongkham;
 
 
 public interface PhongkhamDAO {
-	public List<Phongkham> getAlls(int mapk);
+	public List<Phongkham> getAlls(int maphongkham);
 
     public boolean insert(Phongkham phongkham);
 

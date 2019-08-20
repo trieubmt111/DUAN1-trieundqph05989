@@ -9,17 +9,30 @@ import duan1_trieundqph05989.entity.Phieukham;
 import duan1_trieundqph05989.util.HibernateUtils;
 
 public class PhieukhamDAOimpl implements PhieukhamDAO {
-   @Override
-	public List<Phieukham> getAlls(int mapik) {
+
+	@Override
+	public List<Phieukham> getAlls(String mapik) {
 		 List<Phieukham> list = null;
 	        Session session = HibernateUtils.getSessionFactory().getCurrentSession();
 	        try {
 //	        	String sql = "From Phieukham phk where phk.nhanVien.phongkham.maphongkham = :maphongkham";
-	        	String sql="From Phieukham";
+	        	String sql = "From Phieukham phk where phk.phongkham.nhanvien.manv = :manv";
 	        	session.beginTransaction();
 		            Query query = session.createQuery(sql);
-		            query.setParameter("maphongkham", mapik);
+		            query.setParameter("manv", mapik);
 		            list = query.list();
+		            for(Phieukham pk : list) {
+		            	System.out.println(pk.getBenhnhan().getMabn());
+		             	System.out.println(pk.getBenhnhan().getTenbn());
+		        
+		            	System.out.println(pk.getPhongkham().getNhanvien().getManv());
+		            	System.out.println(pk.getNgaykham());
+		            	System.out.println(pk.getPhongkham().getNhanvien().getTennv());
+		            	System.out.println(pk.getNgaykham());
+		            	System.out.println(pk.getHuongdieutri());
+		    
+		           
+		            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {
@@ -29,7 +42,7 @@ public class PhieukhamDAOimpl implements PhieukhamDAO {
 		
 	}
 
-	@Override
+ @Override
 	public boolean insert(Phieukham phieukham) {
 		Session session = HibernateUtils.getSessionFactory().getCurrentSession();
         try {
@@ -82,5 +95,9 @@ public class PhieukhamDAOimpl implements PhieukhamDAO {
         session.close();
         return phieukham;
 	}
+
+	
+
+		
 
 }

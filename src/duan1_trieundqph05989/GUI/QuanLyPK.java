@@ -27,7 +27,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-
 import duan1_trieundqph05989.DAOImpl.BenhnhanDAOimpl;
 import duan1_trieundqph05989.DAOImpl.NhanvienDAOimpl;
 import duan1_trieundqph05989.DAOImpl.PhieukhamDAOimpl;
@@ -36,9 +35,6 @@ import duan1_trieundqph05989.entity.Benhnhan;
 import duan1_trieundqph05989.entity.Nhanvien;
 import duan1_trieundqph05989.entity.Phieukham;
 import duan1_trieundqph05989.entity.Phongkham;
-
-
-
 
 public class QuanLyPK extends JFrame {
 	private JSplitPane spl1, spl2;
@@ -76,11 +72,14 @@ public class QuanLyPK extends JFrame {
 		add(split1());
 		modelphieukham = (DefaultTableModel) tblphieukham.getModel();
 		modelphongkham = (DefaultTableModel) tblphongkham.getModel();
+		hander();
 		addtbalePhongKham();
 		addCombohuongdieutri();
-
+		hienthinhanvien() ;
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+
+
 
 	private JSplitPane split1() {
 		spl1 = new JSplitPane();
@@ -156,18 +155,17 @@ public class QuanLyPK extends JFrame {
 		lbgioitinh = new JLabel("Giới tính");
 		pn.add(lbgioitinh, new GridBagConstraints(1, 4, 1, 1, 0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(20, 330, 0, 20), 0, 0));
-		
+
 		jdonam = new JRadioButton("Nam", true);
-        pn.add(jdonam, new GridBagConstraints(1, 4, 1, 1, 0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 430, 0, 20), 0, 0));
-        jdonu = new JRadioButton("Nữ", false);
-        pn.add(jdonu, new GridBagConstraints(1, 4, 1, 1, 0, 0.0,
-                GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(20, 500, 0, 20), 0, 0));
-        ButtonGroup group = new ButtonGroup();
-        group.add(jdonam);
-        group.add(jdonu);
-		
-		
+		pn.add(jdonam, new GridBagConstraints(1, 4, 1, 1, 0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new Insets(20, 430, 0, 20), 0, 0));
+		jdonu = new JRadioButton("Nữ", false);
+		pn.add(jdonu, new GridBagConstraints(1, 4, 1, 1, 0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new Insets(20, 500, 0, 20), 0, 0));
+		ButtonGroup group = new ButtonGroup();
+		group.add(jdonam);
+		group.add(jdonu);
+
 		lbchandoan = new JLabel("Chẩn đoán");
 		pn.add(lbchandoan, new GridBagConstraints(0, 5, 1, 1, 0, 0.0, GridBagConstraints.SOUTHWEST,
 				GridBagConstraints.NONE, new Insets(20, 50, 0, 0), 0, 0));
@@ -271,71 +269,75 @@ public class QuanLyPK extends JFrame {
 		JScrollPane sp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		pn.add(sp);
 		sp.getViewport().add(tblphongkham);
+
 		return pn;
 	}
 
 	
+	private void hander() {
+		tblphongkham.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				hienthinhanvien();
+				
+			}
+		});
+		tblphieukham.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent me) {
+		}});
+		
+	}
 
+	
+	private void hienthinhanvien() {
+		int row = tblphongkham.getSelectedRow();
+		String Mapik =  tblphongkham.getValueAt(row, 1)+"";
+		Phongkham phongkham = new Phongkham();
+		phongkham.setMaphongkham(row);
+		phieukhamDAOImpl = new PhieukhamDAOimpl();
+		listphieukham = (ArrayList<Phieukham>) phieukhamDAOImpl.getAlls(Mapik);
+		System.out.println(listphieukham.size());
+		modelphieukham.setRowCount(0);
+		stt = 1;
+		for (Phieukham x : listphieukham) {
+			modelphieukham.addRow(new Object[] { x.getBenhnhan().getMabn(), x.getBenhnhan().getTenbn(), x.getNgaykham(),
+					x.getPhongkham().getNhanvien().getTennv() });
+		}
+
+	}
+		
+	private void addtbalePhongKham() {
+		int row = tblphongkham.getSelectedRow();
+//		int tenpk = (int) tblphongkham.getValueAt(row, 1);
+		phongkhamDAOImpl = new PhongkhamDAOimpl();
+		listphongkham = (ArrayList<Phongkham>) phongkhamDAOImpl.getAlls(row);
+		modelphongkham.setRowCount(0);
+		stt = 1;
+		for (Phongkham x : listphongkham) {
+			modelphongkham.addRow(new Object[] {x.getMaphongkham(), x.getTenphongkham() });
+		}
+		int rowKT = tblphongkham.getRowCount();
+		if (rowKT >= 0) {
+			tblphongkham.setRowSelectionInterval(0, 0);
+
+		}
+	}
+	
+	private boolean vaitro() {
+		for (Benhnhan x : listbn) {
+			if (x.isGioitinh() == true) {
+				x.setGioitinh(false);
+			} else {
+				return true;
+			}
+		}
+		return true;
+	}
 	private void addCombohuongdieutri() {
 		cbohuongdieutri.addItem("Cho về");
 		cbohuongdieutri.addItem("Nhập viện");
 	}
 
-    private boolean vaitro() {
-        for (Benhnhan x : listbn) {
-            if (x.isGioitinh() == true) {
-                x.setGioitinh(false);
-            } else {
-                return true;
-            }
-        }
-        return true;
-    }
-//    private void doMousePhongkham() {
-//        int row = tblphongkham.getSelectedRow();
-//        String mapk = tblphongkham.getValueAt(row, 0).toString();
-//        stt = 1;
-//        int a = 0;
-//        for (int i = 0; i < listphongkham.size(); i++) {
-//            a = a + 1;
-//            if (mapk.equalsIgnoreCase(stt++ + "")) {
-//                tfbacsikham.setText(a + " - " + listphongkham.get(i).getTenphongkham());
-//            }
-//        }
-//        String tenpk = tblphongkham.getValueAt(row, 1).toString();
-//        dao = new NhanVienService();
-//        listnv = nvservice.LayToanBoNhanVienTheoMa(tenpb);
-//        model.setRowCount(0);
-//        stt = 1;
-//        for (ListNhanVien x : listnv) {
-//            model.addRow(new Object[]{stt++, x.getManv(), x.getHoten(), x.isVaitro() ? "TrÆ°á»Ÿng PhÃ²ng" : "NhÃ¢n ViÃªn"});
-//        }
-//        int row1 = tblnhanvien1.getRowCount();
-//        if (row1 > 0) {
-//            int hienthitbl = 0;
-//            tblnhanvien1.setRowSelectionInterval(hienthitbl, hienthitbl);
-//            display(hienthitbl);
-//        } else {
-//            ClearForm();
-//        }
-//        TtFirst();
-//    }
-    private void addtbalePhongKham() {
-		phongkhamDAOImpl = new PhongkhamDAOimpl();
-		listphongkham = (ArrayList<Phongkham>) phongkhamDAOImpl.getAlls();
-		modelphongkham.setRowCount(0);
-		stt = 1;
-		for (Phongkham x : listphongkham) {
-			modelphongkham.addRow(new Object[] { stt++, x.getMaphongkham(), x.getTenphongkham() });
-		}
-		int rowKT = tblphongkham.getRowCount();
-		if (rowKT >= 0) {
-			tblphongkham.setRowSelectionInterval(0, 0);
-			
-		}
-	}
-
-    
 	public static void main(String[] args) {
 		QuanLyPK qlpk = new QuanLyPK();
 		qlpk.setVisible(true);

@@ -13,16 +13,17 @@ import duan1_trieundqph05989.util.HibernateUtils;
 public class PhongkhamDAOimpl implements PhongkhamDAO {
 
 	@Override
-	public List<Phongkham> getAlls() {
+	public List<Phongkham> getAlls(int maphongkham) {
 		List<Phongkham> list = null;
         Session session = HibernateUtils.getSessionFactory().getCurrentSession();
        
         try {
 //        	String sql = "FROM Phieukham pk where pk.phongkham.mapk = :phongkham";
+//        	String sql = "From Phongkham pk where pk.nhanvien.manv=:manv";
         	String sql = "From Phongkham";
             session.beginTransaction();
             Query query = session.createQuery(sql);
-//            query.setParameter( "phongkham", mapik);
+//            query.setParameter( "manv", maphongkham);
             list = query.list();
 //            for (Phongkham pk : list) {
 //            	System.out.println(pk.getTenphongkham());

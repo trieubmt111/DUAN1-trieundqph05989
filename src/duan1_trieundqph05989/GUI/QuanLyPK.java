@@ -27,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+
 import duan1_trieundqph05989.DAOImpl.BenhnhanDAOimpl;
 import duan1_trieundqph05989.DAOImpl.NhanvienDAOimpl;
 import duan1_trieundqph05989.DAOImpl.PhieukhamDAOimpl;
@@ -40,7 +41,7 @@ public class QuanLyPK extends JFrame {
 	private JSplitPane spl1, spl2;
 	private JTextField tfngaykham, tfmabn, tfhoten, tfngaysinh, tfchandoan, tftimkiem, tfphongkham, tfbacsikham;
 	private JLabel lbphongkham, lbngaykham, lbbacsikham, lbmabn, lbhoten, lbgioitinh, lbngaysinh, lbchandoan,
-			lbhuongdieutri, lbdonthuoc, lbtimkiem;
+			lbhuongdieutri, lbdonthuoc, lbtimkiem,lblbacsikham,lblphongkham;
 	private JPasswordField ádf;
 	private JRadioButton jdonam, jdonu, jdochove, jdonhapvien;
 	private JButton btthem, btsua, btxoa, btluu, btboqua, bttimkiem, btketxuat;
@@ -75,11 +76,9 @@ public class QuanLyPK extends JFrame {
 		hander();
 		addtbalePhongKham();
 		addCombohuongdieutri();
-		hienthinhanvien() ;
+		hienthinhanvien();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-
-
 
 	private JSplitPane split1() {
 		spl1 = new JSplitPane();
@@ -105,17 +104,17 @@ public class QuanLyPK extends JFrame {
 		lbphongkham = new JLabel("Phòng Khám ");
 		pn.add(lbphongkham, new GridBagConstraints(0, 1, 1, 1, 0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(20, 50, 0, 0), 0, 0));
-		tfphongkham = new JTextField();
-		tfphongkham.setPreferredSize(new Dimension(700, 27));
-		pn.add(tfphongkham, new GridBagConstraints(1, 1, 1, 1, 1, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
+		lblphongkham = new JLabel();
+		lblphongkham.setPreferredSize(new Dimension(700, 27));
+		pn.add(lblphongkham, new GridBagConstraints(1, 1, 1, 1, 1, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE,
 				new Insets(20, 10, 0, 20), 0, 0));
 
 		lbbacsikham = new JLabel("Bác sĩ khám ");
 		pn.add(lbbacsikham, new GridBagConstraints(0, 2, 1, 1, 0, 0.0, GridBagConstraints.SOUTHWEST,
 				GridBagConstraints.NONE, new Insets(20, 50, 0, 20), 0, 0));
-		tfbacsikham = new JTextField();
-		tfbacsikham.setPreferredSize(new Dimension(280, 27));
-		pn.add(tfbacsikham, new GridBagConstraints(1, 2, 1, 1, 1, 0.0, GridBagConstraints.SOUTHWEST,
+		 lblbacsikham = new JLabel();
+		lblbacsikham.setPreferredSize(new Dimension(280, 27));
+		pn.add(lblbacsikham, new GridBagConstraints(1, 2, 1, 1, 1, 0.0, GridBagConstraints.SOUTHWEST,
 				GridBagConstraints.NONE, new Insets(20, 10, 0, 20), 0, 0));
 
 		lbngaykham = new JLabel("Ngày Khám ");
@@ -273,29 +272,29 @@ public class QuanLyPK extends JFrame {
 		return pn;
 	}
 
-	
 	private void hander() {
 		tblphongkham.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				hienthinhanvien();
-				
+				addCombo();
+				 addCombotenbacsi();
 			}
 		});
 		tblphieukham.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
-		}});
-		
+			}
+		});
+
 	}
 
-	
 	private void hienthinhanvien() {
 		int row = tblphongkham.getSelectedRow();
-		String Mapik =  tblphongkham.getValueAt(row, 1)+"";
+//		int Mapik = (int) tblphongkham.getValueAt(row, 1);
 		Phongkham phongkham = new Phongkham();
 		phongkham.setMaphongkham(row);
 		phieukhamDAOImpl = new PhieukhamDAOimpl();
-		listphieukham = (ArrayList<Phieukham>) phieukhamDAOImpl.getAlls(Mapik);
+		listphieukham = (ArrayList<Phieukham>) phieukhamDAOImpl.getAlls(row);
 		System.out.println(listphieukham.size());
 		modelphieukham.setRowCount(0);
 		stt = 1;
@@ -305,25 +304,67 @@ public class QuanLyPK extends JFrame {
 		}
 
 	}
-		
+	private void addCombo() {
+		phongkhamDAOImpl = new PhongkhamDAOimpl();
+		listphongkham = (ArrayList<Phongkham>) phongkhamDAOImpl.getAlls(vitri);
+		for (Phongkham x : listphongkham) {
+			lblphongkham.setText(x.getMaphongkham() + " - " + x.getTenphongkham());
+		}
+		int row = tblphongkham.getSelectedRow();
+		String mapk = tblphongkham.getValueAt(row, 0).toString();
+		stt = 1;
+		int a = 0;
+		for (int i = 0; i < listphongkham.size(); i++) {
+			a = a + 1;
+			if (mapk.equalsIgnoreCase(stt++ + "")) {
+				lblphongkham.setText(listphongkham.get(i).getMaphongkham()+ " - " + listphongkham.get(i).getTenphongkham());
+			}
+		}
+	
+	}
+	private void addCombotenbacsi() {
+		phongkhamDAOImpl = new PhongkhamDAOimpl();
+		listphongkham = (ArrayList<Phongkham>) phongkhamDAOImpl.getAlls(vitri);
+		for (Phongkham x : listphongkham) {
+			lblbacsikham.setText(x.getNhanvien().getTennv());
+		}
+		int row = tblphongkham.getSelectedRow();
+		String mapk = tblphongkham.getValueAt(row, 0).toString();
+		stt = 1;
+		int a = 0;
+		for (int i = 0; i < listphongkham.size(); i++) {
+			a = a + 1;
+			if (mapk.equalsIgnoreCase(stt++ + "")) {
+				lblbacsikham.setText(listphongkham.get(i).getNhanvien().getTennv());
+			}
+		}
+	
+	}
+
+
 	private void addtbalePhongKham() {
 		int row = tblphongkham.getSelectedRow();
-//		int tenpk = (int) tblphongkham.getValueAt(row, 1);
+//		int tenpk = (int) tblphongkham.getValueAt(row, 0) ;
+
 		phongkhamDAOImpl = new PhongkhamDAOimpl();
 		listphongkham = (ArrayList<Phongkham>) phongkhamDAOImpl.getAlls(row);
 		modelphongkham.setRowCount(0);
 		stt = 1;
 		for (Phongkham x : listphongkham) {
-			modelphongkham.addRow(new Object[] {x.getMaphongkham(), x.getTenphongkham() });
+			System.out.println("maphongkham: " + x.getMaphongkham());
+			System.out.println("tenphongkham: " + x.getTenphongkham());
+			System.out.println("BÁc sĩ khám:"+ x.getNhanvien().getTennv());
+			modelphongkham.addRow(new Object[] { x.getMaphongkham(), x.getTenphongkham()});
 		}
+
 		int rowKT = tblphongkham.getRowCount();
 		if (rowKT >= 0) {
 			tblphongkham.setRowSelectionInterval(0, 0);
 
 		}
 	}
-	
-	private boolean vaitro() {
+
+	private boolean Gioitinh() {
 		for (Benhnhan x : listbn) {
 			if (x.isGioitinh() == true) {
 				x.setGioitinh(false);
@@ -333,6 +374,7 @@ public class QuanLyPK extends JFrame {
 		}
 		return true;
 	}
+
 	private void addCombohuongdieutri() {
 		cbohuongdieutri.addItem("Cho về");
 		cbohuongdieutri.addItem("Nhập viện");

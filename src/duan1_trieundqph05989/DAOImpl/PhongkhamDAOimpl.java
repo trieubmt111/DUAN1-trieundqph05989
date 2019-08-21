@@ -19,16 +19,19 @@ public class PhongkhamDAOimpl implements PhongkhamDAO {
        
         try {
 //        	String sql = "FROM Phieukham pk where pk.phongkham.mapk = :phongkham";
-//        	String sql = "From Phongkham pk where pk.nhanvien.manv=:manv";
+//    	String sql = "From Phongkham pk  where pk.maphongkham=:maphongkham";
         	String sql = "From Phongkham";
+
             session.beginTransaction();
             Query query = session.createQuery(sql);
-//            query.setParameter( "manv", maphongkham);
+//            query.setParameter( "maphongkham", maphongkham);
             list = query.list();
-//            for (Phongkham pk : list) {
-//            	System.out.println(pk.getTenphongkham());
-//            	System.out.println(pk.getMaphongkham());
-//            }
+            for (Phongkham pk : list) {
+            	System.out.println(pk.getTenphongkham());
+            	System.out.println(pk.getMaphongkham());
+            	System.out.println(pk.getNhanvien().getManv());
+            	System.out.println(pk.getNhanvien().getTennv());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -11,28 +11,28 @@ import duan1_trieundqph05989.util.HibernateUtils;
 public class PhieukhamDAOimpl implements PhieukhamDAO {
 
 	@Override
-	public List<Phieukham> getAlls(String mapik) {
+	public List<Phieukham> getAlls(int mapik) {
 		 List<Phieukham> list = null;
 	        Session session = HibernateUtils.getSessionFactory().getCurrentSession();
 	        try {
 //	        	String sql = "From Phieukham phk where phk.nhanVien.phongkham.maphongkham = :maphongkham";
-	        	String sql = "From Phieukham phk where phk.phongkham.nhanvien.manv = :manv";
+	        	String sql = "From Phieukham";
 	        	session.beginTransaction();
 		            Query query = session.createQuery(sql);
-		            query.setParameter("manv", mapik);
+//		            query.setParameter("manv", mapik);
 		            list = query.list();
-		            for(Phieukham pk : list) {
-		            	System.out.println(pk.getBenhnhan().getMabn());
-		             	System.out.println(pk.getBenhnhan().getTenbn());
-		        
-		            	System.out.println(pk.getPhongkham().getNhanvien().getManv());
-		            	System.out.println(pk.getNgaykham());
-		            	System.out.println(pk.getPhongkham().getNhanvien().getTennv());
-		            	System.out.println(pk.getNgaykham());
-		            	System.out.println(pk.getHuongdieutri());
-		    
-		           
-		            }
+//		            for(Phieukham pk : list) {
+//		            	System.out.println(pk.getBenhnhan().getMabn());
+//		             	System.out.println(pk.getBenhnhan().getTenbn());
+//		        
+//		            	System.out.println(pk.getPhongkham().getNhanvien().getManv());
+//		            	System.out.println(pk.getNgaykham());
+//		            	System.out.println(pk.getPhongkham().getNhanvien().getTennv());
+//		            	System.out.println(pk.getNgaykham());
+//		            	System.out.println(pk.getHuongdieutri());
+//		    
+//		           
+//		            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        } finally {

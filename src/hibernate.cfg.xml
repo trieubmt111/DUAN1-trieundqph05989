@@ -3,19 +3,19 @@
 		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="connection.password">123</property>
-        <property name="connection.url">jdbc:sqlserver://localhost:1433;databaseName=qlpk_duan1</property>
-        <property name="connection.username">aaa</property>
-        <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-        
-        
-        		<!-- JDBC connection pool (use the built-in) -->
+	<session-factory>
+		<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="connection.password">123</property>
+		<property name="connection.url">jdbc:sqlserver://localhost:1433;databaseName=qlpk_duan1</property>
+		<property name="connection.username">aaa</property>
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="connection.characterEncoding">utf8</property>
+		<property name="default_schema">qlpk_duan1</property>
+
+		<!-- JDBC connection pool (use the built-in) -->
 		<property name="connection.pool_size">1</property>
 
-		<!-- SQL dialect -->
-		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+
 
 		<!-- Enable Hibernate's automatic session context management -->
 		<property name="current_session_context_class">thread</property>
@@ -25,15 +25,14 @@
 
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
-        
-        
-        
-        
-         <property name="connection.characterEncoding">utf8</property>
-        <property name="hibernate.default_schema">qlpk_duan1</property>
-        <mapping class="duan1_trieundqph05989.entity.Benhnhan"></mapping>
-        <mapping class="duan1_trieundqph05989.entity.Nhanvien"></mapping>
-        <mapping class="duan1_trieundqph05989.entity.Phieukham"></mapping>
-        <mapping class="duan1_trieundqph05989.entity.Phongkham"></mapping>
-    </session-factory>
+
+
+
+
+
+		<mapping class="duan1_trieundqph05989.entity.Benhnhan"></mapping>
+		<mapping class="duan1_trieundqph05989.entity.Nhanvien"></mapping>
+		<mapping class="duan1_trieundqph05989.entity.Phieukham"></mapping>
+		<mapping class="duan1_trieundqph05989.entity.Phongkham"></mapping>
+	</session-factory>
 </hibernate-configuration>

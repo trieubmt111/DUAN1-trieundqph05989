@@ -77,6 +77,7 @@ public class QuanLyPK extends JFrame {
 		addtbalePhongKham();
 		addCombohuongdieutri();
 		hienthinhanvien();
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -233,7 +234,7 @@ public class QuanLyPK extends JFrame {
 		pn.setLayout(new BorderLayout());
 		tblphieukham = new JTable();
 		int with[] = { 30, 200 };
-		String title[] = { "Mã Bệnh Nhân", "Họ Tên", "Ngày Khám", "Bác Sĩ Khám" };
+		String title[] = { "Mã Bệnh Nhân", "Họ Tên", "Ngày Khám" };
 		String data[][] = {};
 		modelphieukham = new DefaultTableModel(data, title);
 		tblphieukham.setModel(modelphieukham);
@@ -241,8 +242,7 @@ public class QuanLyPK extends JFrame {
 			tblphieukham.getColumnModel().getColumn(0).setPreferredWidth(50);
 			tblphieukham.getColumnModel().getColumn(1).setPreferredWidth(100);
 			tblphieukham.getColumnModel().getColumn(2).setPreferredWidth(100);
-			tblphieukham.getColumnModel().getColumn(3).setPreferredWidth(50);
-
+		
 		}
 		modelphieukham.setRowCount(4);
 		JScrollPane sp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -283,6 +283,7 @@ public class QuanLyPK extends JFrame {
 		});
 		tblphieukham.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
+				doMousePhieukham();
 			}
 		});
 
@@ -290,7 +291,7 @@ public class QuanLyPK extends JFrame {
 
 	private void hienthinhanvien() {
 		int row = tblphongkham.getSelectedRow();
-//		int Mapik = (int) tblphongkham.getValueAt(row, 1);
+//		int row1 =(int)  tblphongkham.getValueAt(row, 1);
 		Phongkham phongkham = new Phongkham();
 		phongkham.setMaphongkham(row);
 		phieukhamDAOImpl = new PhieukhamDAOimpl();
@@ -362,8 +363,41 @@ public class QuanLyPK extends JFrame {
 			tblphongkham.setRowSelectionInterval(0, 0);
 
 		}
+	}	
+	private void doMousePhieukham() {
+		int row = tblphieukham.getSelectedRow();
+		if (row > 0) {
+			return;
+		} else {
+			vitri = row;
+			displayphieukham(vitri);
+		}
+		tblphieukham.setRowSelectionInterval(vitri, vitri);
 	}
 
+	private void displayphieukham(int vitri) {
+//		tfphongkham.setText(listpik.get(vitri).getPhongkham().getTenpk());
+
+		tfngaykham.setText(listphieukham.get(vitri).getNgaykham());
+//		cbobacsikham.setTransferHandler(listpik.get(vitri).getNhanvien().getTennv());
+		tfmabn.setText(listphieukham.get(vitri).getBenhnhan().getMabn());
+		tfhoten.setText(listphieukham.get(vitri).getBenhnhan().getTenbn());
+		tfngaysinh.setText(listphieukham.get(vitri).getBenhnhan().getNgaysinh());
+		tfbacsikham.setText(listphieukham.get(vitri).getPhongkham().getNhanvien().getTennv());
+		tfchandoan.setText(listphieukham.get(vitri).getChandoan());
+		boolean vaitro = listphieukham.get(vitri).getBenhnhan().isGioitinh();
+        if (vaitro == true) {
+            jdonam.setSelected(true);
+        } else {
+            jdonu.setSelected(true);
+        }
+		if (listphieukham.get(vitri).getHuongdieutri().equals("Cho về")) {
+			cbohuongdieutri.setSelectedItem("Cho về");
+		} else {
+			cbohuongdieutri.setSelectedItem("Nhập viện");
+		}
+		tblphieukham.setRowSelectionInterval(vitri, vitri);
+	}
 	private boolean Gioitinh() {
 		for (Benhnhan x : listbn) {
 			if (x.isGioitinh() == true) {
